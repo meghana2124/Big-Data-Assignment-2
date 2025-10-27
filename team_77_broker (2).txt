@@ -1,0 +1,95 @@
+Kafka Broker Setup Commands
+
+This file contains the configuration changes and the sequence of commands to set up the Kafka broker.
+
+
+
+A) ZeroTier IP Configuration for Kafka Broker
+
+
+1. Edit the server.properties file:
+
+nano /opt/kafka/config/server.properties
+
+
+2. Add or modify the following lines to configure broker's advertised listeners and listeners:
+
+# Kafka Broker Configuration
+
+advertised.listeners=PLAINTEXT://10.243.192.13:9092
+
+listeners=PLAINTEXT://0.0.0.0:9092
+
+
+The 'advertised.listeners' property is what clients will use to connect to Kafka.
+'listeners' is the address Kafka binds to on the broker machine.
+
+
+
+
+B) Start ZooKeeper Service
+
+
+1. Change directory to Kafka's bin directory:
+
+cd /opt/kafka/bin
+
+
+2. Start the ZooKeeper service:
+
+./zookeeper-server-start.sh ../config/zookeeper.properties
+
+
+Ensure ZooKeeper is running before starting Kafka.
+
+
+
+
+C) Start Kafka Broker Service
+
+
+1. Change directory to Kafka's bin directory:
+
+cd /opt/kafka/bin
+
+
+2. Start the Kafka broker:
+
+./kafka-server-start.sh ../config/server.properties
+
+
+This starts Kafka using the `server.properties` configuration file.
+
+
+
+
+D) Topic Creation Commands
+
+
+Once Kafka is running, we can create topics.
+
+# topic-cpu
+./kafka-topics.sh --create --topic topic-cpu --bootstrap-server 10.243.192.13:9092 --partitions 1 --replication-factor 1
+
+# topic-mem
+./kafka-topics.sh --create --topic topic-mem --bootstrap-server 10.243.192.13:9092 --partitions 1 --replication-factor 1
+
+# topic-net
+./kafka-topics.sh --create --topic topic-net --bootstrap-server 10.243.192.13:9092 --partitions 1 --replication-factor 1
+
+# topic-disk
+./kafka-topics.sh --create --topic topic-disk --bootstrap-server 10.243.192.13:9092 --partitions 1 --replication-factor 1
+
+
+
+
+E) Verify Topic Creation
+
+cd /opt/kafka/bin
+
+./kafka-topics.sh --list --bootstrap-server 10.243.192.13:9092
+
+# This will list all the topics in the Kafka broker.
+
+
+
